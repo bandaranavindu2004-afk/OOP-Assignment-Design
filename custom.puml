@@ -1,0 +1,97 @@
+@startuml
+
+skinparam Linetype ortho
+
+abstract class Person {
+    #ID : string
+    #Name : string
+    #Email : string
+    -Password : string
+    +Person(name:string, email:string, password:string)
+    +disaplayDashboard () : void
+    +getID() : string const
+    +getInfo() : void
+    +checkPassword () : bool const
+}
+
+class Student {
+    -StudentNumber : static int
+    -enrolledCourses : vector<Course*>
+    +Student(ame:string, email:string, password:string){StudentNumber++}
+    +getEnrolledCourses() : void
+}
+
+class Lecturer {
+    -LecturerNumber : static int
+    +Lecturer(ame:string, email:string, password:string){LecturerNumber++}
+}
+
+class Administrator {
+    -AdministratorNumber : static int
+    +Administrator(ame:string, email:string, password:string){AdministratorNumber++}
+}
+
+Student --up-|> Person
+Lecturer -up--|> Person
+Administrator --up-|> Person
+
+Person -up[hidden]---- Course
+
+abstract class Course {
+    -Code : string
+    -Title : string
+    -CreditValue : int
+    -Capacity : int
+    -Lecturer : Lecturer*
+    +Course(code: string, title: string, credits: int, cap: int, lec: Lecturer*)
+    +DisplayInfo() : void
+}
+
+class Lecture {
+    -Prerequisites : string
+    +Lecture(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+}
+
+class Lab {
+    -Prerequisites : string
+    +Lab(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+}
+
+class Project {
+    -Prerequisites : string
+    +Project(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+}
+
+Lecture --down-|> Course
+Lab -down--|> Course
+Project --down-|> Course
+
+class Timetable {
+    -timeslots : vector<TimeSlot>
+    +addtimeslot(slot: TimeSlot) : void
+    +hasClash(other: Timetable) : bool
+}
+
+class TimeSlot {
+    -day : string
+    -startTime : string
+    -endTime : string
+    -location : string
+    +overlapWith(other: TimeSlot) : bool
+}
+
+class EnrollmentTemp {
+    - studentId : string
+    - selectedCourses : vector<Course*>
+    + addCourse(course: Course*) : void
+    + removeCourse(course: Course*) : void
+    + showallCourses() : vector<string>
+    + finalizeRegistration() : bool
+}
+
+Timetable --* Course
+TimeSlot -right-* Timetable
+EnrollmentTemp .down.> Student
+EnrollmentTemp .up.> Course
+
+@enduml
