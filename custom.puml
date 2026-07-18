@@ -94,7 +94,11 @@ TimeSlot -right-* Timetable
 EnrollmentTemp .down.> Student
 EnrollmentTemp .up.> Course
 
+<<<<<<< HEAD
 'add comment
 'add com
+=======
+'abcd
+>>>>>>> 1a567ad279188e10b1c6cb7b803b73785fceb1a4
 
 @enduml
