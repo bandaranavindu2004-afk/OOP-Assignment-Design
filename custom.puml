@@ -94,4 +94,6 @@ TimeSlot -right-* Timetable
 EnrollmentTemp .down.> Student
 EnrollmentTemp .up.> Course
 
+'abcd
+
 @enduml
