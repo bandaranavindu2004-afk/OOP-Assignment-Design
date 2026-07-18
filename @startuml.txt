@@ -2,6 +2,25 @@
 
 skinparam Linetype ortho
 
+' ==========================================
+' ADDED FOR FR3.3: Custom Exception Hierarchy
+' ==========================================
+class "std::exception" as std_exception {
+}
+class EnrollmentException {
+    +getMessage() : string
+}
+class CourseFullException {
+}
+class PrereqNotMetException {
+}
+
+std_exception <|-- EnrollmentException
+EnrollmentException <|-- CourseFullException
+EnrollmentException <|-- PrereqNotMetException
+' ==========================================
+
+
 abstract class Person {
     #ID : string
     #Name : string
@@ -28,13 +47,7 @@ class Lecturer {
 
 class Administrator {
     -AdministratorNumber : static int
-    +Administrator(name:string, email:string, password:string){AdministratorNumber++}
-    +createUser() : void
-    +updateUser() : void
-    +removeUser() : void
-    +createCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
-    +removeCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
-    +editCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
+    +Administrator(ame:string, email:string, password:string){AdministratorNumber++}
 }
 
 Student --up-|> Person
@@ -49,23 +62,30 @@ abstract class Course {
     -CreditValue : int
     -Capacity : int
     -Lecturer : Lecturer*
+    
+    ' MODIFIED FOR FR3.4: Changed to vector<Course*> to handle chains
+    -Prerequisites : vector<Course*> 
+    
     +Course(code: string, title: string, credits: int, cap: int, lec: Lecturer*)
     +DisplayInfo() : void
+    
+    ' ADDED FOR FR3.4: Function to recursively check the chain
+    +hasMetPrerequisites(s: Student*) : bool 
 }
 
 class Lecture {
-    -Prerequisites : string
-    +Lecture(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Lecture(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 class Lab {
-    -Prerequisites : string
-    +Lab(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Lab(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 class Project {
-    -Prerequisites : string
-    +Project(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Project(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 Lecture --down-|> Course
@@ -98,13 +118,6 @@ class EnrollmentTemp {
 Timetable --* Course
 TimeSlot -right-* Timetable
 EnrollmentTemp .down.> Student
-EnrollmentTemp .up.> Course
-
-<<<<<<< HEAD
-'add comment
-'add com
-=======
-'abcd
->>>>>>> 1a567ad279188e10b1c6cb7b803b73785fceb1a4
+EnrollmentTemp .up.> Course                                                                                    
 
 @enduml
