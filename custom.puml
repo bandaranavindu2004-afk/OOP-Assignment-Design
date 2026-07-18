@@ -28,7 +28,13 @@ class Lecturer {
 
 class Administrator {
     -AdministratorNumber : static int
-    +Administrator(ame:string, email:string, password:string){AdministratorNumber++}
+    +Administrator(name:string, email:string, password:string){AdministratorNumber++}
+    +createUser() : void
+    +updateUser() : void
+    +removeUser() : void
+    +createCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
+    +removeCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
+    +editCourse(code: string, title: string, credits: int, cap: int, lec: Lecturer* ,Prerequisites : string) : void
 }
 
 Student --up-|> Person
