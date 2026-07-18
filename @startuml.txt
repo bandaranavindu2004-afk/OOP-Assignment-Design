@@ -2,6 +2,25 @@
 
 skinparam Linetype ortho
 
+' ==========================================
+' ADDED FOR FR3.3: Custom Exception Hierarchy
+' ==========================================
+class "std::exception" as std_exception {
+}
+class EnrollmentException {
+    +getMessage() : string
+}
+class CourseFullException {
+}
+class PrereqNotMetException {
+}
+
+std_exception <|-- EnrollmentException
+EnrollmentException <|-- CourseFullException
+EnrollmentException <|-- PrereqNotMetException
+' ==========================================
+
+
 abstract class Person {
     #ID : string
     #Name : string
@@ -43,23 +62,30 @@ abstract class Course {
     -CreditValue : int
     -Capacity : int
     -Lecturer : Lecturer*
+    
+    ' MODIFIED FOR FR3.4: Changed to vector<Course*> to handle chains
+    -Prerequisites : vector<Course*> 
+    
     +Course(code: string, title: string, credits: int, cap: int, lec: Lecturer*)
     +DisplayInfo() : void
+    
+    ' ADDED FOR FR3.4: Function to recursively check the chain
+    +hasMetPrerequisites(s: Student*) : bool 
 }
 
 class Lecture {
-    -Prerequisites : string
-    +Lecture(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Lecture(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 class Lab {
-    -Prerequisites : string
-    +Lab(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Lab(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 class Project {
-    -Prerequisites : string
-    +Project(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: string)
+    ' Removed the string prerequisite
+    +Project(code: string, title: string, credits: int, cap: int, lec: Lecturer*, prereq: vector<Course*>)
 }
 
 Lecture --down-|> Course
@@ -92,8 +118,6 @@ class EnrollmentTemp {
 Timetable --* Course
 TimeSlot -right-* Timetable
 EnrollmentTemp .down.> Student
-EnrollmentTemp .up.> Course
-
-'add comment
+EnrollmentTemp .up.> Course                                                                                    
 
 @enduml
